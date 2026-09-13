@@ -1,0 +1,172 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_hud")
+
+[node name="RotuloEntregas" type="Label" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 324.0
+offset_bottom = 60.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 30
+text = "Entregas: 0/3"
+
+[node name="RotuloVidas" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 24.0
+offset_top = 60.0
+offset_right = 324.0
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 26
+text = "Vidas: 5"
+mouse_filter = 2
+
+[node name="RotuloTempo" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -324.0
+offset_top = 16.0
+offset_right = -24.0
+offset_bottom = 60.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 30
+text = "Tempo: 03:00"
+horizontal_alignment = 2
+
+[node name="RotuloNivel" type="Label" parent="."]
+layout_mode = 1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -240.0
+offset_right = 240.0
+offset_top = 20.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+text = "Nível 1"
+horizontal_alignment = 1
+mouse_filter = 2
+
+[node name="RotuloDica" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -90.0
+offset_bottom = -46.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 0.95, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 26
+text = "Pegue um pacote!"
+horizontal_alignment = 1
+
+[node name="PainelFim" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Escurecer" type="ColorRect" parent="PainelFim"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Centro" type="CenterContainer" parent="PainelFim"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Caixa" type="PanelContainer" parent="PainelFim/Centro"]
+layout_mode = 2
+
+[node name="Margem" type="MarginContainer" parent="PainelFim/Centro/Caixa"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 32
+
+[node name="Conteudo" type="VBoxContainer" parent="PainelFim/Centro/Caixa/Margem"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="RotuloResultado" type="Label" parent="PainelFim/Centro/Caixa/Margem/Conteudo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+text = "VOCÊ VENCEU!"
+horizontal_alignment = 1
+
+[node name="RotuloDetalhe" type="Label" parent="PainelFim/Centro/Caixa/Margem/Conteudo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Todas as entregas foram concluídas!"
+horizontal_alignment = 1
+
+[node name="Espaco" type="Control" parent="PainelFim/Centro/Caixa/Margem/Conteudo"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="BotaoContinuar" type="Button" parent="PainelFim/Centro/Caixa/Margem/Conteudo"]
+visible = false
+custom_minimum_size = Vector2(280, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Continuar"
+
+[node name="BotaoProximoNivel" type="Button" parent="PainelFim/Centro/Caixa/Margem/Conteudo"]
+visible = false
+custom_minimum_size = Vector2(280, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Próximo nível"
+
+[node name="BotaoReiniciar" type="Button" parent="PainelFim/Centro/Caixa/Margem/Conteudo"]
+custom_minimum_size = Vector2(280, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Jogar novamente"
+
+[node name="BotaoMenu" type="Button" parent="PainelFim/Centro/Caixa/Margem/Conteudo"]
+custom_minimum_size = Vector2(280, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Menu principal"

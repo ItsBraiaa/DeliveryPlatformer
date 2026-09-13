@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[node name="Lanterna" type="SpotLight3D"]
+position = Vector3(0.6, -0.15, -0.4)
+light_color = Color(0.96, 0.98, 1, 1)
+light_energy = 5.5
+light_cull_mask = 1
+shadow_enabled = true
+spot_range = 34.0
+spot_attenuation = 0.65
+spot_angle = 34.0
+spot_angle_attenuation = 0.7
+
+[node name="LuzEquipamento" type="OmniLight3D" parent="."]
+position = Vector3(0, 0, -3)
+light_color = Color(0.8, 0.88, 1, 1)
+light_energy = 0.35
+light_cull_mask = 2
+omni_range = 4.5

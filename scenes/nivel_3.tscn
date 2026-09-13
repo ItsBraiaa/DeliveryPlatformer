@@ -1,0 +1,806 @@
+[gd_scene load_steps=32 format=3]
+
+[ext_resource type="Script" path="res://scripts/gerenciador_jogo.gd" id="gerenciador"]
+[ext_resource type="Script" path="res://scripts/zona_queda.gd" id="queda"]
+[ext_resource type="PackedScene" path="res://scenes/jogador.tscn" id="jogador"]
+[ext_resource type="PackedScene" path="res://scenes/pacote.tscn" id="pacote"]
+[ext_resource type="PackedScene" path="res://scenes/zona_entrega.tscn" id="casa"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="hud"]
+
+[sub_resource type="ProceduralSkyMaterial" id="mat_ceu"]
+sky_top_color = Color(0.36, 0.52, 0.68, 1)
+sky_horizon_color = Color(0.78, 0.88, 0.95, 1)
+ground_bottom_color = Color(0.28, 0.43, 0.56, 1)
+ground_horizon_color = Color(0.78, 0.88, 0.95, 1)
+
+[sub_resource type="Sky" id="ceu"]
+sky_material = SubResource("mat_ceu")
+
+[sub_resource type="Environment" id="ambiente"]
+background_mode = 2
+sky = SubResource("ceu")
+ambient_light_source = 3
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="mat_neve"]
+albedo_color = Color(0.9, 0.95, 1, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="mat_rocha"]
+albedo_color = Color(0.3, 0.41, 0.52, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="mat_gelo"]
+albedo_color = Color(0.17, 0.68, 0.88, 1)
+roughness = 0.12
+
+[sub_resource type="StandardMaterial3D" id="mat_risco"]
+albedo_color = Color(0.74, 0.95, 1, 1)
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="mat_pinheiro"]
+albedo_color = Color(0.12, 0.32, 0.33, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="mat_tronco"]
+albedo_color = Color(0.33, 0.24, 0.2, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="malha_base"]
+size = Vector3(14, 1.02, 10)
+
+[sub_resource type="BoxShape3D" id="forma_base"]
+size = Vector3(14, 1.2, 10)
+
+[sub_resource type="BoxMesh" id="malha_ilha"]
+size = Vector3(8, 1.02, 8)
+
+[sub_resource type="BoxShape3D" id="forma_ilha"]
+size = Vector3(8, 1.2, 8)
+
+[sub_resource type="BoxMesh" id="malha_gelo"]
+size = Vector3(2.4, 0.7, 6)
+
+[sub_resource type="BoxShape3D" id="forma_gelo"]
+size = Vector3(2.4, 0.7, 6)
+
+[sub_resource type="BoxMesh" id="malha_risco"]
+size = Vector3(0.07, 0.02, 4.8)
+
+[sub_resource type="BoxMesh" id="malha_coleta"]
+size = Vector3(2.4, 0.6, 2.4)
+
+[sub_resource type="BoxShape3D" id="forma_coleta"]
+size = Vector3(2.4, 0.6, 2.4)
+
+[sub_resource type="BoxMesh" id="malha_capa_base"]
+size = Vector3(14.04, 0.18, 10.04)
+
+[sub_resource type="BoxMesh" id="malha_capa_ilha"]
+size = Vector3(8.04, 0.18, 8.04)
+
+[sub_resource type="CylinderMesh" id="tronco"]
+top_radius = 0.16
+bottom_radius = 0.2
+height = 0.8
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="copa"]
+top_radius = 0.0
+bottom_radius = 0.85
+height = 1.6
+radial_segments = 6
+
+[sub_resource type="CylinderMesh" id="neve_copa"]
+top_radius = 0.0
+bottom_radius = 0.73
+height = 1.42
+radial_segments = 6
+
+[sub_resource type="CylinderMesh" id="montanha"]
+top_radius = 0.0
+bottom_radius = 12.0
+height = 22.0
+radial_segments = 5
+
+[sub_resource type="BoxShape3D" id="forma_queda"]
+size = Vector3(220, 4, 220)
+
+[node name="Nivel3" type="Node3D"]
+script = ExtResource("gerenciador")
+nome_nivel = "Nível 3 — Correio na neve"
+mostrar_dicas = false
+vidas_iniciais = 4
+proximo_nivel = "res://scenes/nivel_4.tscn"
+dica_inicial = "5 pacotes. 5 destinos. Escolha sua rota."
+tempo_limite = 180.0
+
+[node name="Ambiente" type="WorldEnvironment" parent="."]
+environment = SubResource("ambiente")
+
+[node name="Sol" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-48, -28, 0)
+light_color = Color(0.9, 0.95, 1, 1)
+light_energy = 1.05
+shadow_enabled = true
+
+[node name="Cenario" type="Node3D" parent="."]
+
+[node name="Deposito" type="StaticBody3D" parent="Cenario"]
+position = Vector3(0, -0.6, 10)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Deposito"]
+shape = SubResource("forma_base")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Deposito"]
+position = Vector3(0, -0.09, 0)
+mesh = SubResource("malha_base")
+material_override = SubResource("mat_rocha")
+
+[node name="Neve" type="MeshInstance3D" parent="Cenario/Deposito"]
+position = Vector3(0, 0.51, 0)
+mesh = SubResource("malha_capa_base")
+material_override = SubResource("mat_neve")
+
+[node name="Ilha1" type="StaticBody3D" parent="Cenario"]
+position = Vector3(-18, -0.6, 0)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Ilha1"]
+shape = SubResource("forma_ilha")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Ilha1"]
+position = Vector3(0, -0.09, 0)
+mesh = SubResource("malha_ilha")
+material_override = SubResource("mat_rocha")
+
+[node name="Neve" type="MeshInstance3D" parent="Cenario/Ilha1"]
+position = Vector3(0, 0.51, 0)
+mesh = SubResource("malha_capa_ilha")
+material_override = SubResource("mat_neve")
+
+[node name="Ilha2" type="StaticBody3D" parent="Cenario"]
+position = Vector3(-18, 0, -20)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Ilha2"]
+shape = SubResource("forma_ilha")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Ilha2"]
+position = Vector3(0, -0.09, 0)
+mesh = SubResource("malha_ilha")
+material_override = SubResource("mat_rocha")
+
+[node name="Neve" type="MeshInstance3D" parent="Cenario/Ilha2"]
+position = Vector3(0, 0.51, 0)
+mesh = SubResource("malha_capa_ilha")
+material_override = SubResource("mat_neve")
+
+[node name="Ilha3" type="StaticBody3D" parent="Cenario"]
+position = Vector3(0, 0.6, -30)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Ilha3"]
+shape = SubResource("forma_ilha")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Ilha3"]
+position = Vector3(0, -0.09, 0)
+mesh = SubResource("malha_ilha")
+material_override = SubResource("mat_rocha")
+
+[node name="Neve" type="MeshInstance3D" parent="Cenario/Ilha3"]
+position = Vector3(0, 0.51, 0)
+mesh = SubResource("malha_capa_ilha")
+material_override = SubResource("mat_neve")
+
+[node name="Ilha4" type="StaticBody3D" parent="Cenario"]
+position = Vector3(18, 0, -20)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Ilha4"]
+shape = SubResource("forma_ilha")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Ilha4"]
+position = Vector3(0, -0.09, 0)
+mesh = SubResource("malha_ilha")
+material_override = SubResource("mat_rocha")
+
+[node name="Neve" type="MeshInstance3D" parent="Cenario/Ilha4"]
+position = Vector3(0, 0.51, 0)
+mesh = SubResource("malha_capa_ilha")
+material_override = SubResource("mat_neve")
+
+[node name="Ilha5" type="StaticBody3D" parent="Cenario"]
+position = Vector3(18, -0.6, 0)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Ilha5"]
+shape = SubResource("forma_ilha")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Ilha5"]
+position = Vector3(0, -0.09, 0)
+mesh = SubResource("malha_ilha")
+material_override = SubResource("mat_rocha")
+
+[node name="Neve" type="MeshInstance3D" parent="Cenario/Ilha5"]
+position = Vector3(0, 0.51, 0)
+mesh = SubResource("malha_capa_ilha")
+material_override = SubResource("mat_neve")
+
+[node name="PonteGelo1" type="StaticBody3D" parent="Cenario" groups=["gelo"]]
+position = Vector3(-9, -0.14999999999999997, 5)
+rotation_degrees = Vector3(0, 60.94539590092286, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/PonteGelo1"]
+shape = SubResource("forma_gelo")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/PonteGelo1"]
+mesh = SubResource("malha_gelo")
+material_override = SubResource("mat_gelo")
+
+[node name="Veio0" type="MeshInstance3D" parent="Cenario/PonteGelo1"]
+position = Vector3(-0.55, 0.355, 0)
+rotation_degrees = Vector3(0, -8, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="Veio1" type="MeshInstance3D" parent="Cenario/PonteGelo1"]
+position = Vector3(0, 0.355, 0)
+rotation_degrees = Vector3(0, 10, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="Veio2" type="MeshInstance3D" parent="Cenario/PonteGelo1"]
+position = Vector3(0.55, 0.355, 0)
+rotation_degrees = Vector3(0, -8, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="PonteGelo2" type="StaticBody3D" parent="Cenario" groups=["gelo"]]
+position = Vector3(-18, 0.15000000000000002, -10)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/PonteGelo2"]
+shape = SubResource("forma_gelo")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/PonteGelo2"]
+mesh = SubResource("malha_gelo")
+material_override = SubResource("mat_gelo")
+
+[node name="Veio0" type="MeshInstance3D" parent="Cenario/PonteGelo2"]
+position = Vector3(-0.55, 0.355, 0)
+rotation_degrees = Vector3(0, -8, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="Veio1" type="MeshInstance3D" parent="Cenario/PonteGelo2"]
+position = Vector3(0, 0.355, 0)
+rotation_degrees = Vector3(0, 10, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="Veio2" type="MeshInstance3D" parent="Cenario/PonteGelo2"]
+position = Vector3(0.55, 0.355, 0)
+rotation_degrees = Vector3(0, -8, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="PonteGelo3" type="StaticBody3D" parent="Cenario" groups=["gelo"]]
+position = Vector3(-9, 0.7499999999999999, -25)
+rotation_degrees = Vector3(0, -60.94539590092286, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/PonteGelo3"]
+shape = SubResource("forma_gelo")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/PonteGelo3"]
+mesh = SubResource("malha_gelo")
+material_override = SubResource("mat_gelo")
+
+[node name="Veio0" type="MeshInstance3D" parent="Cenario/PonteGelo3"]
+position = Vector3(-0.55, 0.355, 0)
+rotation_degrees = Vector3(0, -8, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="Veio1" type="MeshInstance3D" parent="Cenario/PonteGelo3"]
+position = Vector3(0, 0.355, 0)
+rotation_degrees = Vector3(0, 10, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="Veio2" type="MeshInstance3D" parent="Cenario/PonteGelo3"]
+position = Vector3(0.55, 0.355, 0)
+rotation_degrees = Vector3(0, -8, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="PonteGelo4" type="StaticBody3D" parent="Cenario" groups=["gelo"]]
+position = Vector3(9, 0.7499999999999999, -25)
+rotation_degrees = Vector3(0, -119.05460409907714, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/PonteGelo4"]
+shape = SubResource("forma_gelo")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/PonteGelo4"]
+mesh = SubResource("malha_gelo")
+material_override = SubResource("mat_gelo")
+
+[node name="Veio0" type="MeshInstance3D" parent="Cenario/PonteGelo4"]
+position = Vector3(-0.55, 0.355, 0)
+rotation_degrees = Vector3(0, -8, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="Veio1" type="MeshInstance3D" parent="Cenario/PonteGelo4"]
+position = Vector3(0, 0.355, 0)
+rotation_degrees = Vector3(0, 10, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="Veio2" type="MeshInstance3D" parent="Cenario/PonteGelo4"]
+position = Vector3(0.55, 0.355, 0)
+rotation_degrees = Vector3(0, -8, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="PonteGelo5" type="StaticBody3D" parent="Cenario" groups=["gelo"]]
+position = Vector3(18, 0.15000000000000002, -10)
+rotation_degrees = Vector3(0, -180, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/PonteGelo5"]
+shape = SubResource("forma_gelo")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/PonteGelo5"]
+mesh = SubResource("malha_gelo")
+material_override = SubResource("mat_gelo")
+
+[node name="Veio0" type="MeshInstance3D" parent="Cenario/PonteGelo5"]
+position = Vector3(-0.55, 0.355, 0)
+rotation_degrees = Vector3(0, -8, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="Veio1" type="MeshInstance3D" parent="Cenario/PonteGelo5"]
+position = Vector3(0, 0.355, 0)
+rotation_degrees = Vector3(0, 10, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="Veio2" type="MeshInstance3D" parent="Cenario/PonteGelo5"]
+position = Vector3(0.55, 0.355, 0)
+rotation_degrees = Vector3(0, -8, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="PonteGelo6" type="StaticBody3D" parent="Cenario" groups=["gelo"]]
+position = Vector3(9, -0.14999999999999997, 5)
+rotation_degrees = Vector3(0, 119.05460409907714, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/PonteGelo6"]
+shape = SubResource("forma_gelo")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/PonteGelo6"]
+mesh = SubResource("malha_gelo")
+material_override = SubResource("mat_gelo")
+
+[node name="Veio0" type="MeshInstance3D" parent="Cenario/PonteGelo6"]
+position = Vector3(-0.55, 0.355, 0)
+rotation_degrees = Vector3(0, -8, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="Veio1" type="MeshInstance3D" parent="Cenario/PonteGelo6"]
+position = Vector3(0, 0.355, 0)
+rotation_degrees = Vector3(0, 10, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="Veio2" type="MeshInstance3D" parent="Cenario/PonteGelo6"]
+position = Vector3(0.55, 0.355, 0)
+rotation_degrees = Vector3(0, -8, 0)
+mesh = SubResource("malha_risco")
+material_override = SubResource("mat_risco")
+
+[node name="Coleta1" type="StaticBody3D" parent="Cenario" groups=["gelo", "plataformas_coleta"]]
+position = Vector3(10.5, 1.0, -20)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Coleta1"]
+shape = SubResource("forma_coleta")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Coleta1"]
+mesh = SubResource("malha_coleta")
+material_override = SubResource("mat_gelo")
+
+[node name="Coleta2" type="StaticBody3D" parent="Cenario" groups=["gelo", "plataformas_coleta"]]
+position = Vector3(10.5, 0.4, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Coleta2"]
+shape = SubResource("forma_coleta")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Coleta2"]
+mesh = SubResource("malha_coleta")
+material_override = SubResource("mat_gelo")
+
+[node name="Coleta3" type="StaticBody3D" parent="Cenario" groups=["gelo", "plataformas_coleta"]]
+position = Vector3(-10.5, 0.4, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Coleta3"]
+shape = SubResource("forma_coleta")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Coleta3"]
+mesh = SubResource("malha_coleta")
+material_override = SubResource("mat_gelo")
+
+[node name="Coleta4" type="StaticBody3D" parent="Cenario" groups=["gelo", "plataformas_coleta"]]
+position = Vector3(-10.5, 1.0, -20)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Coleta4"]
+shape = SubResource("forma_coleta")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Coleta4"]
+mesh = SubResource("malha_coleta")
+material_override = SubResource("mat_gelo")
+
+[node name="Coleta5" type="StaticBody3D" parent="Cenario" groups=["gelo", "plataformas_coleta"]]
+position = Vector3(0, 1.6, -22.5)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Coleta5"]
+shape = SubResource("forma_coleta")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Coleta5"]
+mesh = SubResource("malha_coleta")
+material_override = SubResource("mat_gelo")
+
+[node name="Pacotes" type="Node3D" parent="."]
+
+[node name="Pacote1" parent="Pacotes" instance=ExtResource("pacote")]
+position = Vector3(10.5, 2.0, -20)
+destino = 1
+
+[node name="Pacote2" parent="Pacotes" instance=ExtResource("pacote")]
+position = Vector3(10.5, 1.4, 0)
+destino = 2
+
+[node name="Pacote3" parent="Pacotes" instance=ExtResource("pacote")]
+position = Vector3(-10.5, 1.4, 0)
+destino = 3
+
+[node name="Pacote4" parent="Pacotes" instance=ExtResource("pacote")]
+position = Vector3(-10.5, 2.0, -20)
+destino = 4
+
+[node name="Pacote5" parent="Pacotes" instance=ExtResource("pacote")]
+position = Vector3(0, 2.6, -22.5)
+destino = 5
+
+[node name="ZonasEntrega" type="Node3D" parent="."]
+
+[node name="Casa1" parent="ZonasEntrega" instance=ExtResource("casa")]
+position = Vector3(-17.3, 0, 0)
+rotation_degrees = Vector3(0, 90, 0)
+destino = 1
+telhado_nevado = true
+
+[node name="Casa2" parent="ZonasEntrega" instance=ExtResource("casa")]
+position = Vector3(-17.3, 0.6, -20)
+rotation_degrees = Vector3(0, 90, 0)
+destino = 2
+telhado_nevado = true
+
+[node name="Casa3" parent="ZonasEntrega" instance=ExtResource("casa")]
+position = Vector3(0, 1.2, -29.3)
+rotation_degrees = Vector3(0, 0, 0)
+destino = 3
+telhado_nevado = true
+
+[node name="Casa4" parent="ZonasEntrega" instance=ExtResource("casa")]
+position = Vector3(17.3, 0.6, -20)
+rotation_degrees = Vector3(0, -90, 0)
+destino = 4
+telhado_nevado = true
+
+[node name="Casa5" parent="ZonasEntrega" instance=ExtResource("casa")]
+position = Vector3(17.3, 0, 0)
+rotation_degrees = Vector3(0, -90, 0)
+destino = 5
+telhado_nevado = true
+
+[node name="Decoracao" type="Node3D" parent="."]
+
+[node name="Pinheiro0" type="Node3D" parent="Decoracao"]
+position = Vector3(-5.8, 0, 13)
+
+[node name="Tronco" type="MeshInstance3D" parent="Decoracao/Pinheiro0"]
+position = Vector3(0, 0.4, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa0" type="MeshInstance3D" parent="Decoracao/Pinheiro0"]
+position = Vector3(0, 1.1, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_pinheiro")
+
+[node name="Neve0" type="MeshInstance3D" parent="Decoracao/Pinheiro0"]
+position = Vector3(0, 1.22, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("neve_copa")
+material_override = SubResource("mat_neve")
+
+[node name="Copa1" type="MeshInstance3D" parent="Decoracao/Pinheiro0"]
+position = Vector3(0, 1.9000000000000001, 0)
+scale = Vector3(0.8200000000000001, 1, 0.8200000000000001)
+mesh = SubResource("copa")
+material_override = SubResource("mat_pinheiro")
+
+[node name="Neve1" type="MeshInstance3D" parent="Decoracao/Pinheiro0"]
+position = Vector3(0, 2.02, 0)
+scale = Vector3(0.8200000000000001, 1, 0.8200000000000001)
+mesh = SubResource("neve_copa")
+material_override = SubResource("mat_neve")
+
+[node name="Pinheiro1" type="Node3D" parent="Decoracao"]
+position = Vector3(5.8, 0, 13)
+
+[node name="Tronco" type="MeshInstance3D" parent="Decoracao/Pinheiro1"]
+position = Vector3(0, 0.4, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa0" type="MeshInstance3D" parent="Decoracao/Pinheiro1"]
+position = Vector3(0, 1.1, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_pinheiro")
+
+[node name="Neve0" type="MeshInstance3D" parent="Decoracao/Pinheiro1"]
+position = Vector3(0, 1.22, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("neve_copa")
+material_override = SubResource("mat_neve")
+
+[node name="Copa1" type="MeshInstance3D" parent="Decoracao/Pinheiro1"]
+position = Vector3(0, 1.9000000000000001, 0)
+scale = Vector3(0.8200000000000001, 1, 0.8200000000000001)
+mesh = SubResource("copa")
+material_override = SubResource("mat_pinheiro")
+
+[node name="Neve1" type="MeshInstance3D" parent="Decoracao/Pinheiro1"]
+position = Vector3(0, 2.02, 0)
+scale = Vector3(0.8200000000000001, 1, 0.8200000000000001)
+mesh = SubResource("neve_copa")
+material_override = SubResource("mat_neve")
+
+[node name="Pinheiro2" type="Node3D" parent="Decoracao"]
+position = Vector3(-20.8, 0, -2.7)
+
+[node name="Tronco" type="MeshInstance3D" parent="Decoracao/Pinheiro2"]
+position = Vector3(0, 0.4, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa0" type="MeshInstance3D" parent="Decoracao/Pinheiro2"]
+position = Vector3(0, 1.1, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_pinheiro")
+
+[node name="Neve0" type="MeshInstance3D" parent="Decoracao/Pinheiro2"]
+position = Vector3(0, 1.22, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("neve_copa")
+material_override = SubResource("mat_neve")
+
+[node name="Copa1" type="MeshInstance3D" parent="Decoracao/Pinheiro2"]
+position = Vector3(0, 1.9000000000000001, 0)
+scale = Vector3(0.8200000000000001, 1, 0.8200000000000001)
+mesh = SubResource("copa")
+material_override = SubResource("mat_pinheiro")
+
+[node name="Neve1" type="MeshInstance3D" parent="Decoracao/Pinheiro2"]
+position = Vector3(0, 2.02, 0)
+scale = Vector3(0.8200000000000001, 1, 0.8200000000000001)
+mesh = SubResource("neve_copa")
+material_override = SubResource("mat_neve")
+
+[node name="Pinheiro3" type="Node3D" parent="Decoracao"]
+position = Vector3(-20.8, 0.6, -22.7)
+
+[node name="Tronco" type="MeshInstance3D" parent="Decoracao/Pinheiro3"]
+position = Vector3(0, 0.4, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa0" type="MeshInstance3D" parent="Decoracao/Pinheiro3"]
+position = Vector3(0, 1.1, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_pinheiro")
+
+[node name="Neve0" type="MeshInstance3D" parent="Decoracao/Pinheiro3"]
+position = Vector3(0, 1.22, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("neve_copa")
+material_override = SubResource("mat_neve")
+
+[node name="Copa1" type="MeshInstance3D" parent="Decoracao/Pinheiro3"]
+position = Vector3(0, 1.9000000000000001, 0)
+scale = Vector3(0.8200000000000001, 1, 0.8200000000000001)
+mesh = SubResource("copa")
+material_override = SubResource("mat_pinheiro")
+
+[node name="Neve1" type="MeshInstance3D" parent="Decoracao/Pinheiro3"]
+position = Vector3(0, 2.02, 0)
+scale = Vector3(0.8200000000000001, 1, 0.8200000000000001)
+mesh = SubResource("neve_copa")
+material_override = SubResource("mat_neve")
+
+[node name="Pinheiro4" type="Node3D" parent="Decoracao"]
+position = Vector3(2.8, 1.2, -32.7)
+
+[node name="Tronco" type="MeshInstance3D" parent="Decoracao/Pinheiro4"]
+position = Vector3(0, 0.4, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa0" type="MeshInstance3D" parent="Decoracao/Pinheiro4"]
+position = Vector3(0, 1.1, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_pinheiro")
+
+[node name="Neve0" type="MeshInstance3D" parent="Decoracao/Pinheiro4"]
+position = Vector3(0, 1.22, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("neve_copa")
+material_override = SubResource("mat_neve")
+
+[node name="Copa1" type="MeshInstance3D" parent="Decoracao/Pinheiro4"]
+position = Vector3(0, 1.9000000000000001, 0)
+scale = Vector3(0.8200000000000001, 1, 0.8200000000000001)
+mesh = SubResource("copa")
+material_override = SubResource("mat_pinheiro")
+
+[node name="Neve1" type="MeshInstance3D" parent="Decoracao/Pinheiro4"]
+position = Vector3(0, 2.02, 0)
+scale = Vector3(0.8200000000000001, 1, 0.8200000000000001)
+mesh = SubResource("neve_copa")
+material_override = SubResource("mat_neve")
+
+[node name="Pinheiro5" type="Node3D" parent="Decoracao"]
+position = Vector3(20.8, 0.6, -22.7)
+
+[node name="Tronco" type="MeshInstance3D" parent="Decoracao/Pinheiro5"]
+position = Vector3(0, 0.4, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa0" type="MeshInstance3D" parent="Decoracao/Pinheiro5"]
+position = Vector3(0, 1.1, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_pinheiro")
+
+[node name="Neve0" type="MeshInstance3D" parent="Decoracao/Pinheiro5"]
+position = Vector3(0, 1.22, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("neve_copa")
+material_override = SubResource("mat_neve")
+
+[node name="Copa1" type="MeshInstance3D" parent="Decoracao/Pinheiro5"]
+position = Vector3(0, 1.9000000000000001, 0)
+scale = Vector3(0.8200000000000001, 1, 0.8200000000000001)
+mesh = SubResource("copa")
+material_override = SubResource("mat_pinheiro")
+
+[node name="Neve1" type="MeshInstance3D" parent="Decoracao/Pinheiro5"]
+position = Vector3(0, 2.02, 0)
+scale = Vector3(0.8200000000000001, 1, 0.8200000000000001)
+mesh = SubResource("neve_copa")
+material_override = SubResource("mat_neve")
+
+[node name="Pinheiro6" type="Node3D" parent="Decoracao"]
+position = Vector3(20.8, 0, -2.7)
+
+[node name="Tronco" type="MeshInstance3D" parent="Decoracao/Pinheiro6"]
+position = Vector3(0, 0.4, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa0" type="MeshInstance3D" parent="Decoracao/Pinheiro6"]
+position = Vector3(0, 1.1, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_pinheiro")
+
+[node name="Neve0" type="MeshInstance3D" parent="Decoracao/Pinheiro6"]
+position = Vector3(0, 1.22, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("neve_copa")
+material_override = SubResource("mat_neve")
+
+[node name="Copa1" type="MeshInstance3D" parent="Decoracao/Pinheiro6"]
+position = Vector3(0, 1.9000000000000001, 0)
+scale = Vector3(0.8200000000000001, 1, 0.8200000000000001)
+mesh = SubResource("copa")
+material_override = SubResource("mat_pinheiro")
+
+[node name="Neve1" type="MeshInstance3D" parent="Decoracao/Pinheiro6"]
+position = Vector3(0, 2.02, 0)
+scale = Vector3(0.8200000000000001, 1, 0.8200000000000001)
+mesh = SubResource("neve_copa")
+material_override = SubResource("mat_neve")
+
+[node name="Montanha0" type="MeshInstance3D" parent="Decoracao"]
+position = Vector3(-51, -2, -58)
+scale = Vector3(1, 0.8, 1)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("montanha")
+material_override = SubResource("mat_neve")
+
+[node name="Montanha1" type="MeshInstance3D" parent="Decoracao"]
+position = Vector3(-34, -2, -65)
+scale = Vector3(1, 1.1, 1)
+rotation_degrees = Vector3(0, 19, 0)
+mesh = SubResource("montanha")
+material_override = SubResource("mat_neve")
+
+[node name="Montanha2" type="MeshInstance3D" parent="Decoracao"]
+position = Vector3(-17, -2, -58)
+scale = Vector3(1, 1.4, 1)
+rotation_degrees = Vector3(0, 38, 0)
+mesh = SubResource("montanha")
+material_override = SubResource("mat_neve")
+
+[node name="Montanha3" type="MeshInstance3D" parent="Decoracao"]
+position = Vector3(0, -2, -65)
+scale = Vector3(1, 0.8, 1)
+rotation_degrees = Vector3(0, 57, 0)
+mesh = SubResource("montanha")
+material_override = SubResource("mat_neve")
+
+[node name="Montanha4" type="MeshInstance3D" parent="Decoracao"]
+position = Vector3(17, -2, -58)
+scale = Vector3(1, 1.1, 1)
+rotation_degrees = Vector3(0, 76, 0)
+mesh = SubResource("montanha")
+material_override = SubResource("mat_neve")
+
+[node name="Montanha5" type="MeshInstance3D" parent="Decoracao"]
+position = Vector3(34, -2, -65)
+scale = Vector3(1, 1.4, 1)
+rotation_degrees = Vector3(0, 95, 0)
+mesh = SubResource("montanha")
+material_override = SubResource("mat_neve")
+
+[node name="Montanha6" type="MeshInstance3D" parent="Decoracao"]
+position = Vector3(51, -2, -58)
+scale = Vector3(1, 0.8, 1)
+rotation_degrees = Vector3(0, 114, 0)
+mesh = SubResource("montanha")
+material_override = SubResource("mat_neve")
+
+[node name="ZonaQueda" type="Area3D" parent="."]
+position = Vector3(0, -12, -10)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("queda")
+
+[node name="Forma" type="CollisionShape3D" parent="ZonaQueda"]
+shape = SubResource("forma_queda")
+
+[node name="Jogador" parent="." instance=ExtResource("jogador")]
+position = Vector3(0, 1, 12)
+
+[node name="Cronometro" type="Timer" parent="."]
+one_shot = true
+
+[node name="InterfaceJogo" type="CanvasLayer" parent="."]
+process_mode = 3
+
+[node name="HUD" parent="InterfaceJogo" instance=ExtResource("hud")]
+
+
+

@@ -1,0 +1,47 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/pacote.gd" id="1_pacote"]
+
+[sub_resource type="BoxShape3D" id="forma_pacote"]
+size = Vector3(1.2, 1.2, 1.2)
+
+[sub_resource type="StandardMaterial3D" id="mat_caixa"]
+albedo_color = Color(0.72, 0.5, 0.28, 1)
+
+[sub_resource type="BoxMesh" id="malha_caixa"]
+size = Vector3(0.6, 0.6, 0.6)
+
+[sub_resource type="StandardMaterial3D" id="mat_fita"]
+albedo_color = Color(0.95, 0.85, 0.35, 1)
+
+[sub_resource type="BoxMesh" id="malha_fita_x"]
+size = Vector3(0.62, 0.62, 0.2)
+
+[sub_resource type="BoxMesh" id="malha_fita_z"]
+size = Vector3(0.2, 0.62, 0.62)
+
+[node name="Pacote" type="Area3D" groups=["pacotes"]]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_pacote")
+
+[node name="Colisao" type="CollisionShape3D" parent="."]
+shape = SubResource("forma_pacote")
+
+[node name="Caixa" type="MeshInstance3D" parent="."]
+mesh = SubResource("malha_caixa")
+surface_material_override/0 = SubResource("mat_caixa")
+
+[node name="FitaX" type="MeshInstance3D" parent="Caixa"]
+mesh = SubResource("malha_fita_x")
+surface_material_override/0 = SubResource("mat_fita")
+
+[node name="FitaZ" type="MeshInstance3D" parent="Caixa"]
+mesh = SubResource("malha_fita_z")
+surface_material_override/0 = SubResource("mat_fita")
+
+[node name="Luz" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+light_color = Color(1, 0.9, 0.5, 1)
+light_energy = 1.2
+omni_range = 3.0

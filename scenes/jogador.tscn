@@ -1,0 +1,89 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/jogador.gd" id="1_jogador"]
+
+[sub_resource type="CapsuleShape3D" id="forma_capsula"]
+radius = 0.4
+height = 1.6
+
+[sub_resource type="StandardMaterial3D" id="mat_corpo"]
+albedo_color = Color(0.2, 0.4, 0.85, 1)
+
+[sub_resource type="CapsuleMesh" id="malha_corpo"]
+radius = 0.4
+height = 1.2
+
+[sub_resource type="StandardMaterial3D" id="mat_pele"]
+albedo_color = Color(0.95, 0.8, 0.65, 1)
+
+[sub_resource type="SphereMesh" id="malha_cabeca"]
+radius = 0.28
+height = 0.56
+
+[sub_resource type="StandardMaterial3D" id="mat_bone"]
+albedo_color = Color(0.9, 0.25, 0.2, 1)
+
+[sub_resource type="CylinderMesh" id="malha_bone"]
+top_radius = 0.3
+bottom_radius = 0.32
+height = 0.14
+
+[sub_resource type="StandardMaterial3D" id="mat_mochila"]
+albedo_color = Color(0.5, 0.35, 0.2, 1)
+
+[sub_resource type="BoxMesh" id="malha_mochila"]
+size = Vector3(0.5, 0.6, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="mat_pacote"]
+albedo_color = Color(0.85, 0.6, 0.3, 1)
+
+[sub_resource type="BoxMesh" id="malha_pacote"]
+size = Vector3(0.45, 0.4, 0.4)
+
+[node name="Jogador" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_jogador")
+
+[node name="Colisao" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("forma_capsula")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Corpo" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+mesh = SubResource("malha_corpo")
+surface_material_override/0 = SubResource("mat_corpo")
+
+[node name="Cabeca" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.62, 0)
+mesh = SubResource("malha_cabeca")
+surface_material_override/0 = SubResource("mat_pele")
+
+[node name="Chapeu" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.86, 0)
+mesh = SubResource("malha_bone")
+surface_material_override/0 = SubResource("mat_bone")
+
+[node name="Mochila" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, 0.42)
+mesh = SubResource("malha_mochila")
+surface_material_override/0 = SubResource("mat_mochila")
+
+[node name="PacoteVisual" type="MeshInstance3D" parent="Visual/Mochila"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+visible = false
+mesh = SubResource("malha_pacote")
+surface_material_override/0 = SubResource("mat_pacote")
+
+[node name="PivoCamera" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="BracoCamera" type="SpringArm3D" parent="PivoCamera"]
+transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 0, 0)
+collision_mask = 1
+spring_length = 5.0
+
+[node name="Camera" type="Camera3D" parent="PivoCamera/BracoCamera"]
+current = true

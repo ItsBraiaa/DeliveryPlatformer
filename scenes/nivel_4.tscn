@@ -1,0 +1,3304 @@
+[gd_scene load_steps=67 format=3]
+
+[ext_resource type="Script" path="res://scripts/gerenciador_jogo.gd" id="gerenciador"]
+[ext_resource type="Script" path="res://scripts/zona_queda.gd" id="queda"]
+[ext_resource type="Script" path="res://scripts/plataforma_movel.gd" id="movel"]
+[ext_resource type="Script" path="res://scripts/ambiente_noturno.gd" id="vento"]
+[ext_resource type="PackedScene" path="res://scenes/jogador.tscn" id="jogador"]
+[ext_resource type="PackedScene" path="res://scenes/pacote.tscn" id="pacote"]
+[ext_resource type="PackedScene" path="res://scenes/zona_entrega.tscn" id="casa"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="hud"]
+[ext_resource type="PackedScene" path="res://scenes/espinhos.tscn" id="espinhos"]
+
+[sub_resource type="Environment" id="ambiente"]
+background_mode = 1
+background_color = Color(0.003, 0.006, 0.013, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.25, 0.34, 0.5, 1)
+ambient_light_energy = 0.055
+tonemap_mode = 2
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.018, 0.03, 0.045, 1)
+fog_light_energy = 0.4
+fog_density = 0.018
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.012
+volumetric_fog_albedo = Color(0.23, 0.28, 0.35, 1)
+volumetric_fog_length = 48.0
+
+[sub_resource type="StandardMaterial3D" id="mat_terra"]
+albedo_color = Color(0.18, 0.22, 0.19, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="mat_pedra"]
+albedo_color = Color(0.25, 0.28, 0.29, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="mat_gelo"]
+albedo_color = Color(0.12, 0.35, 0.4, 1)
+roughness = 0.12
+
+[sub_resource type="StandardMaterial3D" id="mat_madeira"]
+albedo_color = Color(0.23, 0.17, 0.12, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="mat_tronco"]
+albedo_color = Color(0.16, 0.17, 0.15, 1)
+roughness = 1
+
+[sub_resource type="StandardMaterial3D" id="mat_folhas"]
+albedo_color = Color(0.045, 0.12, 0.1, 1)
+roughness = 1
+
+[sub_resource type="StandardMaterial3D" id="mat_movel"]
+albedo_color = Color(0.48, 0.31, 0.12, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="mat_riscos"]
+albedo_color = Color(0.48, 0.61, 0.63, 1)
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="mat_lampada"]
+albedo_color = Color(0.65, 0.55, 0.32, 1)
+emission_enabled = true
+emission = Color(0.38, 0.26, 0.1, 1)
+emission_energy_multiplier = 0.35
+
+[sub_resource type="CylinderMesh" id="tronco"]
+top_radius = 0.22
+bottom_radius = 0.42
+height = 9
+radial_segments = 7
+
+[sub_resource type="CylinderShape3D" id="forma_tronco"]
+radius = 0.42
+height = 9
+
+[sub_resource type="CylinderMesh" id="copa"]
+top_radius = 0
+bottom_radius = 2.4
+height = 5
+radial_segments = 5
+
+[sub_resource type="BoxMesh" id="malha_caixa1"]
+size = Vector3(28, 1.2, 26)
+
+[sub_resource type="BoxShape3D" id="forma_caixa1"]
+size = Vector3(28, 1.2, 26)
+
+[sub_resource type="BoxMesh" id="malha_caixa2"]
+size = Vector3(54, 1.2, 66)
+
+[sub_resource type="BoxShape3D" id="forma_caixa2"]
+size = Vector3(54, 1.2, 66)
+
+[sub_resource type="BoxMesh" id="malha_caixa3"]
+size = Vector3(5, 1, 53)
+
+[sub_resource type="BoxShape3D" id="forma_caixa3"]
+size = Vector3(5, 1, 53)
+
+[sub_resource type="BoxMesh" id="malha_caixa4"]
+size = Vector3(0.18, 2.3, 0.18)
+
+[sub_resource type="BoxShape3D" id="forma_caixa4"]
+size = Vector3(0.18, 2.3, 0.18)
+
+[sub_resource type="BoxMesh" id="malha_caixa5"]
+size = Vector3(0.32, 0.3, 0.32)
+
+[sub_resource type="BoxShape3D" id="forma_caixa5"]
+size = Vector3(0.32, 0.3, 0.32)
+
+[sub_resource type="BoxMesh" id="malha_caixa6"]
+size = Vector3(5, 1, 44.481)
+
+[sub_resource type="BoxShape3D" id="forma_caixa6"]
+size = Vector3(5, 1, 44.481)
+
+[sub_resource type="BoxMesh" id="malha_caixa7"]
+size = Vector3(3.2, 1, 44.481)
+
+[sub_resource type="BoxShape3D" id="forma_caixa7"]
+size = Vector3(3.2, 1, 44.481)
+
+[sub_resource type="BoxMesh" id="malha_caixa8"]
+size = Vector3(5, 1, 54)
+
+[sub_resource type="BoxShape3D" id="forma_caixa8"]
+size = Vector3(5, 1, 54)
+
+[sub_resource type="BoxMesh" id="malha_caixa9"]
+size = Vector3(5, 1, 62.4505)
+
+[sub_resource type="BoxShape3D" id="forma_caixa9"]
+size = Vector3(5, 1, 62.4505)
+
+[sub_resource type="BoxMesh" id="malha_caixa10"]
+size = Vector3(3.2, 1, 64)
+
+[sub_resource type="BoxShape3D" id="forma_caixa10"]
+size = Vector3(3.2, 1, 64)
+
+[sub_resource type="BoxMesh" id="malha_caixa11"]
+size = Vector3(5, 1, 62.813)
+
+[sub_resource type="BoxShape3D" id="forma_caixa11"]
+size = Vector3(5, 1, 62.813)
+
+[sub_resource type="BoxMesh" id="malha_caixa12"]
+size = Vector3(5, 1, 5)
+
+[sub_resource type="BoxShape3D" id="forma_caixa12"]
+size = Vector3(5, 1, 5)
+
+[sub_resource type="BoxMesh" id="malha_caixa13"]
+size = Vector3(3, 0.6, 3)
+
+[sub_resource type="BoxShape3D" id="forma_caixa13"]
+size = Vector3(3, 0.6, 3)
+
+[sub_resource type="BoxMesh" id="malha_caixa14"]
+size = Vector3(4, 0.8, 4)
+
+[sub_resource type="BoxShape3D" id="forma_caixa14"]
+size = Vector3(4, 0.8, 4)
+
+[sub_resource type="BoxMesh" id="malha_caixa15"]
+size = Vector3(2.4, 0.2, 0.22)
+
+[sub_resource type="BoxShape3D" id="forma_caixa15"]
+size = Vector3(2.4, 0.2, 0.22)
+
+[sub_resource type="BoxMesh" id="malha_caixa16"]
+size = Vector3(2.1, 0.18, 0.2)
+
+[sub_resource type="BoxShape3D" id="forma_caixa16"]
+size = Vector3(2.1, 0.18, 0.2)
+
+[sub_resource type="BoxMesh" id="malha_caixa17"]
+size = Vector3(0.7, 3.6, 0.7)
+
+[sub_resource type="BoxShape3D" id="forma_caixa17"]
+size = Vector3(0.7, 3.6, 0.7)
+
+[sub_resource type="BoxMesh" id="malha_caixa18"]
+size = Vector3(13, 0.5, 0.8)
+
+[sub_resource type="BoxShape3D" id="forma_caixa18"]
+size = Vector3(13, 0.5, 0.8)
+
+[sub_resource type="BoxMesh" id="malha_caixa19"]
+size = Vector3(4, 0.9, 2)
+
+[sub_resource type="BoxShape3D" id="forma_caixa19"]
+size = Vector3(4, 0.9, 2)
+
+[sub_resource type="BoxMesh" id="malha_caixa20"]
+size = Vector3(10, 1, 0.7)
+
+[sub_resource type="BoxShape3D" id="forma_caixa20"]
+size = Vector3(10, 1, 0.7)
+
+[sub_resource type="BoxMesh" id="malha_caixa21"]
+size = Vector3(0.7, 1, 8)
+
+[sub_resource type="BoxShape3D" id="forma_caixa21"]
+size = Vector3(0.7, 1, 8)
+
+[sub_resource type="BoxMesh" id="malha_caixa22"]
+size = Vector3(290, 4, 300)
+
+[sub_resource type="BoxShape3D" id="forma_caixa22"]
+size = Vector3(290, 4, 300)
+
+[node name="Nivel4" type="Node3D"]
+script = ExtResource("gerenciador")
+nome_nivel = "Nível 4 — A última ronda"
+mostrar_dicas = false
+vidas_iniciais = 3
+dica_inicial = "Encontre os cinco pacotes. A lanterna acompanha a câmera."
+tempo_limite = 600.0
+
+[node name="Ambiente" type="WorldEnvironment" parent="."]
+environment = SubResource("ambiente")
+
+[node name="Lua" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-35, -25, 0)
+light_color = Color(0.24, 0.35, 0.55, 1)
+light_energy = 0.07
+
+[node name="Vento" type="AudioStreamPlayer" parent="."]
+script = ExtResource("vento")
+
+[node name="Cenario" type="Node3D" parent="."]
+
+[node name="Perigos" type="Node3D" parent="."]
+
+[node name="Marcos" type="Node3D" parent="."]
+
+[node name="Floresta" type="Node3D" parent="."]
+
+[node name="Ruinas" type="Node3D" parent="."]
+
+[node name="Inicio" type="StaticBody3D" parent="Cenario" groups=["exploracao"]]
+position = Vector3(0, -0.6, 75)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Inicio"]
+shape = SubResource("forma_caixa1")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Inicio"]
+mesh = SubResource("malha_caixa1")
+material_override = SubResource("mat_terra")
+
+[node name="BosqueCentral" type="StaticBody3D" parent="Cenario" groups=["exploracao"]]
+position = Vector3(0, -0.6, -22)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/BosqueCentral"]
+shape = SubResource("forma_caixa2")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/BosqueCentral"]
+mesh = SubResource("malha_caixa2")
+material_override = SubResource("mat_terra")
+
+[node name="Clareira1" type="StaticBody3D" parent="Cenario" groups=["exploracao"]]
+position = Vector3(-78, -0.6, 22)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Clareira1"]
+shape = SubResource("forma_caixa1")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Clareira1"]
+mesh = SubResource("malha_caixa1")
+material_override = SubResource("mat_terra")
+
+[node name="Clareira2" type="StaticBody3D" parent="Cenario" groups=["exploracao"]]
+position = Vector3(-78, -0.6, -66)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Clareira2"]
+shape = SubResource("forma_caixa1")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Clareira2"]
+mesh = SubResource("malha_caixa1")
+material_override = SubResource("mat_terra")
+
+[node name="Clareira3" type="StaticBody3D" parent="Cenario" groups=["exploracao"]]
+position = Vector3(0, -0.6, -120)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Clareira3"]
+shape = SubResource("forma_caixa1")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Clareira3"]
+mesh = SubResource("malha_caixa1")
+material_override = SubResource("mat_terra")
+
+[node name="Clareira4" type="StaticBody3D" parent="Cenario" groups=["exploracao"]]
+position = Vector3(78, -0.6, -66)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Clareira4"]
+shape = SubResource("forma_caixa1")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Clareira4"]
+mesh = SubResource("malha_caixa1")
+material_override = SubResource("mat_terra")
+
+[node name="Clareira5" type="StaticBody3D" parent="Cenario" groups=["exploracao"]]
+position = Vector3(78, -0.6, 22)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Clareira5"]
+shape = SubResource("forma_caixa1")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Clareira5"]
+mesh = SubResource("malha_caixa1")
+material_override = SubResource("mat_terra")
+
+[node name="Trilha1" type="StaticBody3D" parent="Cenario" groups=["trilhas"]]
+position = Vector3(0, -0.5, 36.5)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Trilha1"]
+shape = SubResource("forma_caixa3")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Trilha1"]
+mesh = SubResource("malha_caixa3")
+material_override = SubResource("mat_pedra")
+
+[node name="Lampiao1" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-1.9, 1.15, 60)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao1"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao1"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao1Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-1.9, 2.45, 60)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao1Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-1.9, 2.5, 60)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Lampiao2" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-1.9, 1.15, 13)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao2"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao2"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao2Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-1.9, 2.45, 13)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao2Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-1.9, 2.5, 13)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Trilha2" type="StaticBody3D" parent="Cenario" groups=["trilhas"]]
+position = Vector3(-45.5, -0.5, 3.6667)
+rotation_degrees = Vector3(0, 119.4275, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Trilha2"]
+shape = SubResource("forma_caixa6")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Trilha2"]
+mesh = SubResource("malha_caixa6")
+material_override = SubResource("mat_pedra")
+
+[node name="Lampiao3" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-27.8084, 1.15, -4.1317)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao3"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao3"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao3Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-27.8084, 2.45, -4.1317)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao3Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-27.8084, 2.5, -4.1317)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Lampiao4" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-61.3245, 1.15, 14.7748)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao4"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao4"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao4Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-61.3245, 2.45, 14.7748)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao4Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-61.3245, 2.5, 14.7748)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Espinhos1" parent="Perigos" instance=ExtResource("espinhos")]
+position = Vector3(-45.5, 0, 3.6667)
+rotation_degrees = Vector3(0, 119.4275, 0)
+
+[node name="Trilha3" type="StaticBody3D" parent="Cenario" groups=["gelo", "trilhas"]]
+position = Vector3(-45.5, -0.5, -47.6667)
+rotation_degrees = Vector3(0, 60.5725, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Trilha3"]
+shape = SubResource("forma_caixa7")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Trilha3"]
+mesh = SubResource("malha_caixa7")
+material_override = SubResource("mat_gelo")
+
+[node name="Lampiao5" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-29.6755, 1.15, -36.5586)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao5"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao5"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao5Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-29.6755, 2.45, -36.5586)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao5Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-29.6755, 2.5, -36.5586)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Lampiao6" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-63.1916, 1.15, -55.4651)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao6"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao6"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao6Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-63.1916, 2.45, -55.4651)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao6Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-63.1916, 2.5, -55.4651)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Trilha4" type="StaticBody3D" parent="Cenario" groups=["trilhas"]]
+position = Vector3(0, -0.5, -81)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Trilha4"]
+shape = SubResource("forma_caixa8")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Trilha4"]
+mesh = SubResource("malha_caixa8")
+material_override = SubResource("mat_pedra")
+
+[node name="Lampiao7" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-1.9, 1.15, -57)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao7"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao7"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao7Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-1.9, 2.45, -57)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao7Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-1.9, 2.5, -57)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Lampiao8" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-1.9, 1.15, -105)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao8"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao8"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao8Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-1.9, 2.45, -105)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao8Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-1.9, 2.5, -105)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Espinhos2" parent="Perigos" instance=ExtResource("espinhos")]
+position = Vector3(0, 0, -81)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Trilha5" type="StaticBody3D" parent="Cenario" groups=["gelo", "trilhas"]]
+position = Vector3(45.5, -0.5, -47.6667)
+rotation_degrees = Vector3(0, -60.5725, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Trilha5"]
+shape = SubResource("forma_caixa7")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Trilha5"]
+mesh = SubResource("malha_caixa7")
+material_override = SubResource("mat_gelo")
+
+[node name="Lampiao9" type="StaticBody3D" parent="Marcos"]
+position = Vector3(27.8084, 1.15, -39.8683)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao9"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao9"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao9Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(27.8084, 2.45, -39.8683)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao9Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(27.8084, 2.5, -39.8683)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Lampiao10" type="StaticBody3D" parent="Marcos"]
+position = Vector3(61.3245, 1.15, -58.7748)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao10"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao10"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao10Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(61.3245, 2.45, -58.7748)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao10Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(61.3245, 2.5, -58.7748)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Trilha6" type="StaticBody3D" parent="Cenario" groups=["trilhas"]]
+position = Vector3(45.5, -0.5, 3.6667)
+rotation_degrees = Vector3(0, -119.4275, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Trilha6"]
+shape = SubResource("forma_caixa6")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Trilha6"]
+mesh = SubResource("malha_caixa6")
+material_override = SubResource("mat_pedra")
+
+[node name="Lampiao11" type="StaticBody3D" parent="Marcos"]
+position = Vector3(29.6755, 1.15, -7.4414)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao11"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao11"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao11Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(29.6755, 2.45, -7.4414)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao11Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(29.6755, 2.5, -7.4414)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Lampiao12" type="StaticBody3D" parent="Marcos"]
+position = Vector3(63.1916, 1.15, 11.4651)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao12"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao12"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao12Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(63.1916, 2.45, 11.4651)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao12Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(63.1916, 2.5, 11.4651)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Espinhos3" parent="Perigos" instance=ExtResource("espinhos")]
+position = Vector3(45.5, 0, 3.6667)
+rotation_degrees = Vector3(0, -119.4275, 0)
+
+[node name="Trilha7" type="StaticBody3D" parent="Cenario" groups=["trilhas"]]
+position = Vector3(-39, -0.5, 48.5)
+rotation_degrees = Vector3(0, 55.8044, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Trilha7"]
+shape = SubResource("forma_caixa9")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Trilha7"]
+mesh = SubResource("malha_caixa9")
+material_override = SubResource("mat_pedra")
+
+[node name="Lampiao13" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-16.7221, 1.15, 65.9347)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao13"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao13"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao13Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-16.7221, 2.45, 65.9347)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao13Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-16.7221, 2.5, 65.9347)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Lampiao14" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-63.4136, 1.15, 34.2084)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao14"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao14"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao14Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-63.4136, 2.45, 34.2084)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao14Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-63.4136, 2.5, 34.2084)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Espinhos4" parent="Perigos" instance=ExtResource("espinhos")]
+position = Vector3(-39, 0, 48.5)
+rotation_degrees = Vector3(0, 55.8044, 0)
+
+[node name="Trilha8" type="StaticBody3D" parent="Cenario" groups=["gelo", "trilhas"]]
+position = Vector3(-78, -0.5, -22)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Trilha8"]
+shape = SubResource("forma_caixa10")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Trilha8"]
+mesh = SubResource("malha_caixa10")
+material_override = SubResource("mat_gelo")
+
+[node name="Lampiao15" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-79.9, 1.15, 7)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao15"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao15"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao15Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-79.9, 2.45, 7)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao15Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-79.9, 2.5, 7)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Lampiao16" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-79.9, 1.15, -51)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao16"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao16"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao16Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-79.9, 2.45, -51)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao16Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-79.9, 2.5, -51)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Trilha9" type="StaticBody3D" parent="Cenario" groups=["trilhas"]]
+position = Vector3(-39, -0.5, -93)
+rotation_degrees = Vector3(0, -55.3048, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Trilha9"]
+shape = SubResource("forma_caixa11")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Trilha9"]
+mesh = SubResource("malha_caixa11")
+material_override = SubResource("mat_pedra")
+
+[node name="Lampiao17" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-63.4371, 1.15, -78.3929)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao17"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao17"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao17Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-63.4371, 2.45, -78.3929)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao17Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-63.4371, 2.5, -78.3929)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Lampiao18" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-16.7259, 1.15, -110.7314)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao18"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao18"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao18Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-16.7259, 2.45, -110.7314)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao18Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-16.7259, 2.5, -110.7314)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Espinhos5" parent="Perigos" instance=ExtResource("espinhos")]
+position = Vector3(-39, 0, -93)
+rotation_degrees = Vector3(0, -55.3048, 0)
+
+[node name="Trilha10" type="StaticBody3D" parent="Cenario" groups=["trilhas"]]
+position = Vector3(39, -0.5, -93)
+rotation_degrees = Vector3(0, -124.6952, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Trilha10"]
+shape = SubResource("forma_caixa11")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Trilha10"]
+mesh = SubResource("malha_caixa11")
+material_override = SubResource("mat_pedra")
+
+[node name="Lampiao19" type="StaticBody3D" parent="Marcos"]
+position = Vector3(16.7259, 1.15, -110.7314)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao19"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao19"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao19Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(16.7259, 2.45, -110.7314)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao19Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(16.7259, 2.5, -110.7314)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Lampiao20" type="StaticBody3D" parent="Marcos"]
+position = Vector3(63.4371, 1.15, -78.3929)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao20"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao20"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao20Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(63.4371, 2.45, -78.3929)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao20Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(63.4371, 2.5, -78.3929)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Espinhos6" parent="Perigos" instance=ExtResource("espinhos")]
+position = Vector3(39, 0, -93)
+rotation_degrees = Vector3(0, -124.6952, 0)
+
+[node name="Trilha11" type="StaticBody3D" parent="Cenario" groups=["gelo", "trilhas"]]
+position = Vector3(78, -0.5, -22)
+rotation_degrees = Vector3(0, -180, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Trilha11"]
+shape = SubResource("forma_caixa10")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Trilha11"]
+mesh = SubResource("malha_caixa10")
+material_override = SubResource("mat_gelo")
+
+[node name="Lampiao21" type="StaticBody3D" parent="Marcos"]
+position = Vector3(79.9, 1.15, -51)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao21"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao21"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao21Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(79.9, 2.45, -51)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao21Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(79.9, 2.5, -51)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Lampiao22" type="StaticBody3D" parent="Marcos"]
+position = Vector3(79.9, 1.15, 7)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao22"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao22"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao22Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(79.9, 2.45, 7)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao22Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(79.9, 2.5, 7)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Trilha12" type="StaticBody3D" parent="Cenario" groups=["trilhas"]]
+position = Vector3(39, -0.5, 48.5)
+rotation_degrees = Vector3(0, 124.1956, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Trilha12"]
+shape = SubResource("forma_caixa9")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Trilha12"]
+mesh = SubResource("malha_caixa9")
+material_override = SubResource("mat_pedra")
+
+[node name="Lampiao23" type="StaticBody3D" parent="Marcos"]
+position = Vector3(63.4136, 1.15, 34.2084)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao23"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao23"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao23Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(63.4136, 2.45, 34.2084)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao23Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(63.4136, 2.5, 34.2084)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Lampiao24" type="StaticBody3D" parent="Marcos"]
+position = Vector3(16.7221, 1.15, 65.9347)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao24"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao24"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao24Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(16.7221, 2.45, 65.9347)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao24Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(16.7221, 2.5, 65.9347)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Espinhos7" parent="Perigos" instance=ExtResource("espinhos")]
+position = Vector3(39, 0, 48.5)
+rotation_degrees = Vector3(0, 124.1956, 0)
+
+[node name="Espera1" type="StaticBody3D" parent="Cenario"]
+position = Vector3(-96, 0.1, 26)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Espera1"]
+shape = SubResource("forma_caixa12")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Espera1"]
+mesh = SubResource("malha_caixa12")
+material_override = SubResource("mat_pedra")
+
+[node name="Travessia1" type="AnimatableBody3D" parent="Cenario" groups=["plataformas_moveis"]]
+position = Vector3(-102, 0.45, 26)
+rotation_degrees = Vector3(0, 0, 0)
+script = ExtResource("movel")
+deslocamento = Vector3(-8, 0, 0)
+periodo = 7
+sync_to_physics = true
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Travessia1"]
+shape = SubResource("forma_caixa13")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Travessia1"]
+mesh = SubResource("malha_caixa13")
+material_override = SubResource("mat_movel")
+
+[node name="Coleta1" type="StaticBody3D" parent="Cenario" groups=["gelo", "plataformas_coleta"]]
+position = Vector3(-116, 0.5, 26)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Coleta1"]
+shape = SubResource("forma_caixa14")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Coleta1"]
+mesh = SubResource("malha_caixa14")
+material_override = SubResource("mat_gelo")
+
+[node name="Lampiao25" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-96, 1.15, 24)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao25"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao25"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao25Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-96, 2.45, 24)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao25Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-96, 2.5, 24)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="EntradaColeta1" parent="Perigos" instance=ExtResource("espinhos")]
+position = Vector3(-88, 0, 26)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Espera2" type="StaticBody3D" parent="Cenario"]
+position = Vector3(-96, 0.1, -62)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Espera2"]
+shape = SubResource("forma_caixa12")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Espera2"]
+mesh = SubResource("malha_caixa12")
+material_override = SubResource("mat_pedra")
+
+[node name="Travessia2" type="AnimatableBody3D" parent="Cenario" groups=["plataformas_moveis"]]
+position = Vector3(-102, 0.45, -62)
+rotation_degrees = Vector3(0, 0, 0)
+script = ExtResource("movel")
+deslocamento = Vector3(-8, 0, 0)
+periodo = 7.6
+sync_to_physics = true
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Travessia2"]
+shape = SubResource("forma_caixa13")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Travessia2"]
+mesh = SubResource("malha_caixa13")
+material_override = SubResource("mat_movel")
+
+[node name="Coleta2" type="StaticBody3D" parent="Cenario" groups=["plataformas_coleta"]]
+position = Vector3(-116, 0.5, -62)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Coleta2"]
+shape = SubResource("forma_caixa14")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Coleta2"]
+mesh = SubResource("malha_caixa14")
+material_override = SubResource("mat_pedra")
+
+[node name="Lampiao26" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-96, 1.15, -64)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao26"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao26"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao26Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-96, 2.45, -64)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao26Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-96, 2.5, -64)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="EntradaColeta2" parent="Perigos" instance=ExtResource("espinhos")]
+position = Vector3(-88, 0, -62)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Espera3" type="StaticBody3D" parent="Cenario"]
+position = Vector3(0, 0.1, -138)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Espera3"]
+shape = SubResource("forma_caixa12")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Espera3"]
+mesh = SubResource("malha_caixa12")
+material_override = SubResource("mat_pedra")
+
+[node name="Travessia3" type="AnimatableBody3D" parent="Cenario" groups=["plataformas_moveis"]]
+position = Vector3(0, 0.45, -144)
+rotation_degrees = Vector3(0, 0, 0)
+script = ExtResource("movel")
+deslocamento = Vector3(0, 0, -8)
+periodo = 8.2
+sync_to_physics = true
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Travessia3"]
+shape = SubResource("forma_caixa13")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Travessia3"]
+mesh = SubResource("malha_caixa13")
+material_override = SubResource("mat_movel")
+
+[node name="Coleta3" type="StaticBody3D" parent="Cenario" groups=["gelo", "plataformas_coleta"]]
+position = Vector3(0, 0.5, -158)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Coleta3"]
+shape = SubResource("forma_caixa14")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Coleta3"]
+mesh = SubResource("malha_caixa14")
+material_override = SubResource("mat_gelo")
+
+[node name="Lampiao27" type="StaticBody3D" parent="Marcos"]
+position = Vector3(2, 1.15, -138)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao27"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao27"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao27Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(2, 2.45, -138)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao27Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(2, 2.5, -138)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="EntradaColeta3" parent="Perigos" instance=ExtResource("espinhos")]
+position = Vector3(0, 0, -130)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Espera4" type="StaticBody3D" parent="Cenario"]
+position = Vector3(96, 0.1, -62)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Espera4"]
+shape = SubResource("forma_caixa12")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Espera4"]
+mesh = SubResource("malha_caixa12")
+material_override = SubResource("mat_pedra")
+
+[node name="Travessia4" type="AnimatableBody3D" parent="Cenario" groups=["plataformas_moveis"]]
+position = Vector3(102, 0.45, -62)
+rotation_degrees = Vector3(0, 0, 0)
+script = ExtResource("movel")
+deslocamento = Vector3(8, 0, 0)
+periodo = 8.8
+sync_to_physics = true
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Travessia4"]
+shape = SubResource("forma_caixa13")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Travessia4"]
+mesh = SubResource("malha_caixa13")
+material_override = SubResource("mat_movel")
+
+[node name="Coleta4" type="StaticBody3D" parent="Cenario" groups=["plataformas_coleta"]]
+position = Vector3(116, 0.5, -62)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Coleta4"]
+shape = SubResource("forma_caixa14")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Coleta4"]
+mesh = SubResource("malha_caixa14")
+material_override = SubResource("mat_pedra")
+
+[node name="Lampiao28" type="StaticBody3D" parent="Marcos"]
+position = Vector3(96, 1.15, -60)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao28"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao28"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao28Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(96, 2.45, -60)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao28Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(96, 2.5, -60)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="EntradaColeta4" parent="Perigos" instance=ExtResource("espinhos")]
+position = Vector3(88, 0, -62)
+rotation_degrees = Vector3(0, -90, 0)
+
+[node name="Espera5" type="StaticBody3D" parent="Cenario"]
+position = Vector3(96, 0.1, 26)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Espera5"]
+shape = SubResource("forma_caixa12")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Espera5"]
+mesh = SubResource("malha_caixa12")
+material_override = SubResource("mat_pedra")
+
+[node name="Travessia5" type="AnimatableBody3D" parent="Cenario" groups=["plataformas_moveis"]]
+position = Vector3(102, 0.45, 26)
+rotation_degrees = Vector3(0, 0, 0)
+script = ExtResource("movel")
+deslocamento = Vector3(8, 0, 0)
+periodo = 9.4
+sync_to_physics = true
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Travessia5"]
+shape = SubResource("forma_caixa13")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Travessia5"]
+mesh = SubResource("malha_caixa13")
+material_override = SubResource("mat_movel")
+
+[node name="Coleta5" type="StaticBody3D" parent="Cenario" groups=["gelo", "plataformas_coleta"]]
+position = Vector3(116, 0.5, 26)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Coleta5"]
+shape = SubResource("forma_caixa14")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Coleta5"]
+mesh = SubResource("malha_caixa14")
+material_override = SubResource("mat_gelo")
+
+[node name="Lampiao29" type="StaticBody3D" parent="Marcos"]
+position = Vector3(96, 1.15, 28)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao29"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao29"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao29Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(96, 2.45, 28)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao29Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(96, 2.5, 28)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="EntradaColeta5" parent="Perigos" instance=ExtResource("espinhos")]
+position = Vector3(88, 0, 26)
+rotation_degrees = Vector3(0, -90, 0)
+
+[node name="Pacotes" type="Node3D" parent="."]
+
+[node name="Pacote3" parent="Pacotes" instance=ExtResource("pacote")]
+position = Vector3(-116, 1.6, 26)
+destino = 3
+
+[node name="Pacote4" parent="Pacotes" instance=ExtResource("pacote")]
+position = Vector3(-116, 1.6, -62)
+destino = 4
+
+[node name="Pacote5" parent="Pacotes" instance=ExtResource("pacote")]
+position = Vector3(0, 1.6, -158)
+destino = 5
+
+[node name="Pacote1" parent="Pacotes" instance=ExtResource("pacote")]
+position = Vector3(116, 1.6, -62)
+destino = 1
+
+[node name="Pacote2" parent="Pacotes" instance=ExtResource("pacote")]
+position = Vector3(116, 1.6, 26)
+destino = 2
+
+[node name="ZonasEntrega" type="Node3D" parent="."]
+
+[node name="Casa1" parent="ZonasEntrega" instance=ExtResource("casa")]
+position = Vector3(-78, 0, 17)
+destino = 1
+intensidade_marcador = 0.25
+
+[node name="Lampiao30" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-73, 1.15, 18)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao30"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao30"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao30Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-73, 2.45, 18)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao30Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-73, 2.5, 18)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Casa2" parent="ZonasEntrega" instance=ExtResource("casa")]
+position = Vector3(-78, 0, -71)
+destino = 2
+intensidade_marcador = 0.25
+
+[node name="Lampiao31" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-73, 1.15, -70)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao31"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao31"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao31Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-73, 2.45, -70)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao31Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-73, 2.5, -70)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Casa3" parent="ZonasEntrega" instance=ExtResource("casa")]
+position = Vector3(0, 0, -125)
+destino = 3
+intensidade_marcador = 0.25
+
+[node name="Lampiao32" type="StaticBody3D" parent="Marcos"]
+position = Vector3(5, 1.15, -124)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao32"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao32"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao32Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(5, 2.45, -124)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao32Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(5, 2.5, -124)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Casa4" parent="ZonasEntrega" instance=ExtResource("casa")]
+position = Vector3(78, 0, -71)
+destino = 4
+intensidade_marcador = 0.25
+
+[node name="Lampiao33" type="StaticBody3D" parent="Marcos"]
+position = Vector3(83, 1.15, -70)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao33"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao33"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao33Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(83, 2.45, -70)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao33Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(83, 2.5, -70)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Casa5" parent="ZonasEntrega" instance=ExtResource("casa")]
+position = Vector3(78, 0, 17)
+destino = 5
+intensidade_marcador = 0.25
+
+[node name="Lampiao34" type="StaticBody3D" parent="Marcos"]
+position = Vector3(83, 1.15, 18)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao34"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao34"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao34Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(83, 2.45, 18)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao34Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(83, 2.5, 18)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Arvore1" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-11, 0, 84)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore1"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore1"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore1"]
+position = Vector3(0, 8.8, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore1"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 31, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore1"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 43, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore2" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-7, 0, 65)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore2"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore2"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore2"]
+position = Vector3(0, 9, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore2"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 62, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore2"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 86, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore3" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-7, 0, 84)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore3"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore3"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore3"]
+position = Vector3(0, 9.2, 0)
+scale = Vector3(1.2000000000000002, 1.2000000000000002, 1.2000000000000002)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore3"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 93, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore3"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 129, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore4" type="StaticBody3D" parent="Floresta"]
+position = Vector3(7, 0, 84)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore4"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore4"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore4"]
+position = Vector3(0, 8.9, 0)
+scale = Vector3(0.9, 0.9, 0.9)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore4"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 124, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore4"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 172, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore5" type="StaticBody3D" parent="Floresta"]
+position = Vector3(11, 0, 65)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore5"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore5"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore5"]
+position = Vector3(0, 9.1, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore5"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 155, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore5"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 215, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore6" type="StaticBody3D" parent="Floresta"]
+position = Vector3(11, 0, 84)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore6"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore6"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore6"]
+position = Vector3(0, 8.8, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore6"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 186, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore6"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 258, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore7" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-22, 0, -50)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore7"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore7"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore7"]
+position = Vector3(0, 9, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore7"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 217, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore7"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 301, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore8" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-22, 0, -14)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore8"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore8"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore8"]
+position = Vector3(0, 9.2, 0)
+scale = Vector3(1.2000000000000002, 1.2000000000000002, 1.2000000000000002)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore8"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 248, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore8"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 344, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore9" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-22, 0, -5)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore9"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore9"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore9"]
+position = Vector3(0, 8.9, 0)
+scale = Vector3(0.9, 0.9, 0.9)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore9"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 279, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore9"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 387, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore10" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-14, 0, -39)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore10"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore10"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore10"]
+position = Vector3(0, 9.1, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore10"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 310, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore10"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 430, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore11" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-14, 0, -30)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore11"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore11"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore11"]
+position = Vector3(0, 8.8, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore11"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 341, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore11"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 473, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore12" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-14, 0, 6)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore12"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore12"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore12"]
+position = Vector3(0, 9, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore12"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 372, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore12"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 516, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore13" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-7, 0, -50)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore13"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore13"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore13"]
+position = Vector3(0, 9.2, 0)
+scale = Vector3(1.2000000000000002, 1.2000000000000002, 1.2000000000000002)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore13"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 403, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore13"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 559, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore14" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-7, 0, -14)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore14"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore14"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore14"]
+position = Vector3(0, 8.9, 0)
+scale = Vector3(0.9, 0.9, 0.9)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore14"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 434, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore14"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 602, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore15" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-7, 0, -5)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore15"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore15"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore15"]
+position = Vector3(0, 9.1, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore15"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 465, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore15"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 645, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore16" type="StaticBody3D" parent="Floresta"]
+position = Vector3(7, 0, -39)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore16"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore16"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore16"]
+position = Vector3(0, 8.8, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore16"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 496, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore16"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 688, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore17" type="StaticBody3D" parent="Floresta"]
+position = Vector3(7, 0, -30)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore17"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore17"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore17"]
+position = Vector3(0, 9, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore17"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 527, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore17"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 731, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore18" type="StaticBody3D" parent="Floresta"]
+position = Vector3(7, 0, 6)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore18"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore18"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore18"]
+position = Vector3(0, 9.2, 0)
+scale = Vector3(1.2000000000000002, 1.2000000000000002, 1.2000000000000002)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore18"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 558, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore18"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 774, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore19" type="StaticBody3D" parent="Floresta"]
+position = Vector3(14, 0, -50)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore19"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore19"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore19"]
+position = Vector3(0, 8.9, 0)
+scale = Vector3(0.9, 0.9, 0.9)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore19"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 589, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore19"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 817, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore20" type="StaticBody3D" parent="Floresta"]
+position = Vector3(14, 0, -14)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore20"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore20"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore20"]
+position = Vector3(0, 9.1, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore20"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 620, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore20"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 860, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore21" type="StaticBody3D" parent="Floresta"]
+position = Vector3(14, 0, -5)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore21"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore21"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore21"]
+position = Vector3(0, 8.8, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore21"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 651, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore21"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 903, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore22" type="StaticBody3D" parent="Floresta"]
+position = Vector3(22, 0, -39)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore22"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore22"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore22"]
+position = Vector3(0, 9, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore22"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 682, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore22"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 946, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore23" type="StaticBody3D" parent="Floresta"]
+position = Vector3(22, 0, -30)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore23"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore23"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore23"]
+position = Vector3(0, 9.2, 0)
+scale = Vector3(1.2000000000000002, 1.2000000000000002, 1.2000000000000002)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore23"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 713, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore23"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 989, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore24" type="StaticBody3D" parent="Floresta"]
+position = Vector3(22, 0, 6)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore24"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore24"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore24"]
+position = Vector3(0, 8.9, 0)
+scale = Vector3(0.9, 0.9, 0.9)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore24"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 744, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore24"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1032, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore25" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-89, 0, 31)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore25"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore25"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore25"]
+position = Vector3(0, 9.1, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore25"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 775, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore25"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1075, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore26" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-85, 0, 12)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore26"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore26"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore26"]
+position = Vector3(0, 8.8, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore26"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 806, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore26"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1118, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore27" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-85, 0, 31)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore27"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore27"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore27"]
+position = Vector3(0, 9, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore27"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 837, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore27"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1161, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore28" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-71, 0, 31)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore28"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore28"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore28"]
+position = Vector3(0, 9.2, 0)
+scale = Vector3(1.2000000000000002, 1.2000000000000002, 1.2000000000000002)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore28"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 868, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore28"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1204, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore29" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-67, 0, 12)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore29"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore29"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore29"]
+position = Vector3(0, 8.9, 0)
+scale = Vector3(0.9, 0.9, 0.9)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore29"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 899, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore29"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1247, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore30" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-67, 0, 31)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore30"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore30"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore30"]
+position = Vector3(0, 9.1, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore30"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 930, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore30"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1290, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore31" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-89, 0, -57)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore31"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore31"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore31"]
+position = Vector3(0, 8.8, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore31"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 961, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore31"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1333, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore32" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-85, 0, -76)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore32"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore32"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore32"]
+position = Vector3(0, 9, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore32"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 992, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore32"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1376, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore33" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-85, 0, -57)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore33"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore33"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore33"]
+position = Vector3(0, 9.2, 0)
+scale = Vector3(1.2000000000000002, 1.2000000000000002, 1.2000000000000002)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore33"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1023, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore33"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1419, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore34" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-71, 0, -57)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore34"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore34"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore34"]
+position = Vector3(0, 8.9, 0)
+scale = Vector3(0.9, 0.9, 0.9)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore34"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1054, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore34"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1462, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore35" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-67, 0, -76)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore35"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore35"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore35"]
+position = Vector3(0, 9.1, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore35"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1085, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore35"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1505, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore36" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-67, 0, -57)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore36"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore36"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore36"]
+position = Vector3(0, 8.8, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore36"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1116, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore36"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1548, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore37" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-11, 0, -111)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore37"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore37"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore37"]
+position = Vector3(0, 9, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore37"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1147, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore37"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1591, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore38" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-7, 0, -130)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore38"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore38"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore38"]
+position = Vector3(0, 9.2, 0)
+scale = Vector3(1.2000000000000002, 1.2000000000000002, 1.2000000000000002)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore38"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1178, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore38"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1634, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore39" type="StaticBody3D" parent="Floresta"]
+position = Vector3(-7, 0, -111)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore39"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore39"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore39"]
+position = Vector3(0, 8.9, 0)
+scale = Vector3(0.9, 0.9, 0.9)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore39"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1209, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore39"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1677, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore40" type="StaticBody3D" parent="Floresta"]
+position = Vector3(7, 0, -111)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore40"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore40"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore40"]
+position = Vector3(0, 9.1, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore40"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1240, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore40"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1720, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore41" type="StaticBody3D" parent="Floresta"]
+position = Vector3(11, 0, -130)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore41"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore41"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore41"]
+position = Vector3(0, 8.8, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore41"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1271, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore41"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1763, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore42" type="StaticBody3D" parent="Floresta"]
+position = Vector3(11, 0, -111)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore42"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore42"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore42"]
+position = Vector3(0, 9, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore42"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1302, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore42"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1806, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore43" type="StaticBody3D" parent="Floresta"]
+position = Vector3(67, 0, -57)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore43"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore43"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore43"]
+position = Vector3(0, 9.2, 0)
+scale = Vector3(1.2000000000000002, 1.2000000000000002, 1.2000000000000002)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore43"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1333, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore43"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1849, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore44" type="StaticBody3D" parent="Floresta"]
+position = Vector3(71, 0, -76)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore44"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore44"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore44"]
+position = Vector3(0, 8.9, 0)
+scale = Vector3(0.9, 0.9, 0.9)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore44"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1364, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore44"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1892, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore45" type="StaticBody3D" parent="Floresta"]
+position = Vector3(71, 0, -57)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore45"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore45"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore45"]
+position = Vector3(0, 9.1, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore45"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1395, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore45"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1935, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore46" type="StaticBody3D" parent="Floresta"]
+position = Vector3(85, 0, -57)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore46"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore46"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore46"]
+position = Vector3(0, 8.8, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore46"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1426, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore46"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 1978, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore47" type="StaticBody3D" parent="Floresta"]
+position = Vector3(89, 0, -76)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore47"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore47"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore47"]
+position = Vector3(0, 9, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore47"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1457, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore47"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 2021, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore48" type="StaticBody3D" parent="Floresta"]
+position = Vector3(89, 0, -57)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore48"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore48"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore48"]
+position = Vector3(0, 9.2, 0)
+scale = Vector3(1.2000000000000002, 1.2000000000000002, 1.2000000000000002)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore48"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1488, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore48"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 2064, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore49" type="StaticBody3D" parent="Floresta"]
+position = Vector3(67, 0, 31)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore49"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore49"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore49"]
+position = Vector3(0, 8.9, 0)
+scale = Vector3(0.9, 0.9, 0.9)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore49"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1519, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore49"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 2107, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore50" type="StaticBody3D" parent="Floresta"]
+position = Vector3(71, 0, 12)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore50"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore50"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore50"]
+position = Vector3(0, 9.1, 0)
+scale = Vector3(1.1, 1.1, 1.1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore50"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1550, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore50"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 2150, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore51" type="StaticBody3D" parent="Floresta"]
+position = Vector3(71, 0, 31)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore51"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore51"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore51"]
+position = Vector3(0, 8.8, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore51"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1581, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore51"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 2193, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore52" type="StaticBody3D" parent="Floresta"]
+position = Vector3(85, 0, 31)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore52"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore52"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore52"]
+position = Vector3(0, 9, 0)
+scale = Vector3(1, 1, 1)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore52"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1612, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore52"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 2236, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore53" type="StaticBody3D" parent="Floresta"]
+position = Vector3(89, 0, 12)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore53"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore53"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore53"]
+position = Vector3(0, 9.2, 0)
+scale = Vector3(1.2000000000000002, 1.2000000000000002, 1.2000000000000002)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore53"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1643, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore53"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 2279, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Arvore54" type="StaticBody3D" parent="Floresta"]
+position = Vector3(89, 0, 31)
+
+[node name="Forma" type="CollisionShape3D" parent="Floresta/Arvore54"]
+position = Vector3(0, 4.5, 0)
+shape = SubResource("forma_tronco")
+
+[node name="Tronco" type="MeshInstance3D" parent="Floresta/Arvore54"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("tronco")
+material_override = SubResource("mat_tronco")
+
+[node name="Copa" type="MeshInstance3D" parent="Floresta/Arvore54"]
+position = Vector3(0, 8.9, 0)
+scale = Vector3(0.9, 0.9, 0.9)
+mesh = SubResource("copa")
+material_override = SubResource("mat_folhas")
+
+[node name="GalhoA" type="MeshInstance3D" parent="Floresta/Arvore54"]
+position = Vector3(0.7, 5.4, 0)
+rotation_degrees = Vector3(0, 1674, 25)
+mesh = SubResource("malha_caixa15")
+material_override = SubResource("mat_tronco")
+
+[node name="GalhoB" type="MeshInstance3D" parent="Floresta/Arvore54"]
+position = Vector3(-0.65, 6.5, 0)
+rotation_degrees = Vector3(0, 2322, -24)
+mesh = SubResource("malha_caixa16")
+material_override = SubResource("mat_tronco")
+
+[node name="Pilar0" type="StaticBody3D" parent="Ruinas"]
+position = Vector3(-18, 1.8, -37)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Ruinas/Pilar0"]
+shape = SubResource("forma_caixa17")
+
+[node name="Malha" type="MeshInstance3D" parent="Ruinas/Pilar0"]
+mesh = SubResource("malha_caixa17")
+material_override = SubResource("mat_pedra")
+
+[node name="Pilar1" type="StaticBody3D" parent="Ruinas"]
+position = Vector3(-15, 1.8, -37)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Ruinas/Pilar1"]
+shape = SubResource("forma_caixa17")
+
+[node name="Malha" type="MeshInstance3D" parent="Ruinas/Pilar1"]
+mesh = SubResource("malha_caixa17")
+material_override = SubResource("mat_pedra")
+
+[node name="Pilar2" type="StaticBody3D" parent="Ruinas"]
+position = Vector3(-12, 1.8, -37)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Ruinas/Pilar2"]
+shape = SubResource("forma_caixa17")
+
+[node name="Malha" type="MeshInstance3D" parent="Ruinas/Pilar2"]
+mesh = SubResource("malha_caixa17")
+material_override = SubResource("mat_pedra")
+
+[node name="Pilar3" type="StaticBody3D" parent="Ruinas"]
+position = Vector3(-9, 1.8, -37)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Ruinas/Pilar3"]
+shape = SubResource("forma_caixa17")
+
+[node name="Malha" type="MeshInstance3D" parent="Ruinas/Pilar3"]
+mesh = SubResource("malha_caixa17")
+material_override = SubResource("mat_pedra")
+
+[node name="Pilar4" type="StaticBody3D" parent="Ruinas"]
+position = Vector3(-6, 1.8, -37)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Ruinas/Pilar4"]
+shape = SubResource("forma_caixa17")
+
+[node name="Malha" type="MeshInstance3D" parent="Ruinas/Pilar4"]
+mesh = SubResource("malha_caixa17")
+material_override = SubResource("mat_pedra")
+
+[node name="Travessa" type="StaticBody3D" parent="Ruinas"]
+position = Vector3(-12, 3.5, -37)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Ruinas/Travessa"]
+shape = SubResource("forma_caixa18")
+
+[node name="Malha" type="MeshInstance3D" parent="Ruinas/Travessa"]
+mesh = SubResource("malha_caixa18")
+material_override = SubResource("mat_pedra")
+
+[node name="Altar" type="StaticBody3D" parent="Ruinas"]
+position = Vector3(-12, 0.45, -40)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Ruinas/Altar"]
+shape = SubResource("forma_caixa19")
+
+[node name="Malha" type="MeshInstance3D" parent="Ruinas/Altar"]
+mesh = SubResource("malha_caixa19")
+material_override = SubResource("mat_pedra")
+
+[node name="Mureta" type="StaticBody3D" parent="Ruinas"]
+position = Vector3(14, 0.5, -5)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Ruinas/Mureta"]
+shape = SubResource("forma_caixa20")
+
+[node name="Malha" type="MeshInstance3D" parent="Ruinas/Mureta"]
+mesh = SubResource("malha_caixa20")
+material_override = SubResource("mat_pedra")
+
+[node name="MuretaQuebrada" type="StaticBody3D" parent="Ruinas"]
+position = Vector3(19, 0.5, -9)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Ruinas/MuretaQuebrada"]
+shape = SubResource("forma_caixa21")
+
+[node name="Malha" type="MeshInstance3D" parent="Ruinas/MuretaQuebrada"]
+mesh = SubResource("malha_caixa21")
+material_override = SubResource("mat_pedra")
+
+[node name="Lampiao35" type="StaticBody3D" parent="Marcos"]
+position = Vector3(0, 1.15, 79)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao35"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao35"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao35Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(0, 2.45, 79)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao35Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(0, 2.5, 79)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="Lampiao36" type="StaticBody3D" parent="Marcos"]
+position = Vector3(-5, 1.15, 66)
+rotation_degrees = Vector3(0, 0, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Marcos/Lampiao36"]
+shape = SubResource("forma_caixa4")
+
+[node name="Malha" type="MeshInstance3D" parent="Marcos/Lampiao36"]
+mesh = SubResource("malha_caixa4")
+material_override = SubResource("mat_madeira")
+
+[node name="Lampiao36Topo" type="MeshInstance3D" parent="Marcos"]
+position = Vector3(-5, 2.45, 66)
+rotation_degrees = Vector3(0, 0, 0)
+mesh = SubResource("malha_caixa5")
+material_override = SubResource("mat_lampada")
+
+[node name="Lampiao36Luz" type="OmniLight3D" parent="Marcos"]
+position = Vector3(-5, 2.5, 66)
+light_color = Color(0.7, 0.57, 0.34, 1)
+light_energy = 0.35
+omni_range = 5.0
+
+[node name="ZonaQueda" type="Area3D" parent="."]
+position = Vector3(0, -12, -35)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("queda")
+
+[node name="Forma" type="CollisionShape3D" parent="ZonaQueda"]
+shape = SubResource("forma_caixa22")
+
+[node name="Jogador" parent="." instance=ExtResource("jogador")]
+position = Vector3(0, 1, 80)
+usar_lanterna = true
+
+[node name="Cronometro" type="Timer" parent="."]
+one_shot = true
+
+[node name="InterfaceJogo" type="CanvasLayer" parent="."]
+process_mode = 3
+
+[node name="HUD" parent="InterfaceJogo" instance=ExtResource("hud")]
+
+

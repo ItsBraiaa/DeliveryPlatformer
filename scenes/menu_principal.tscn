@@ -1,0 +1,96 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/menu_principal.gd" id="1_menu"]
+
+[node name="MenuPrincipal" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Fundo" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.09, 0.12, 0.2, 1)
+
+[node name="Centro" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Conteudo" type="VBoxContainer" parent="Centro"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Titulo" type="Label" parent="Centro/Conteudo"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+theme_override_font_sizes/font_size = 72
+text = "DELIVERY JUMPER"
+horizontal_alignment = 1
+
+[node name="Subtitulo" type="Label" parent="Centro/Conteudo"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.85, 0.95, 1)
+theme_override_font_sizes/font_size = 24
+text = "Jumper de plataforma + Jogo de entregas"
+horizontal_alignment = 1
+
+[node name="Espaco" type="Control" parent="Centro/Conteudo"]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+
+[node name="BotaoJogar" type="Button" parent="Centro/Conteudo"]
+custom_minimum_size = Vector2(280, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Nível 1"
+
+[node name="BotaoNivel2" type="Button" parent="Centro/Conteudo"]
+custom_minimum_size = Vector2(280, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Nível 2"
+
+[node name="BotaoNivel3" type="Button" parent="Centro/Conteudo"]
+custom_minimum_size = Vector2(280, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Nível 3"
+
+[node name="BotaoNivel4" type="Button" parent="Centro/Conteudo"]
+custom_minimum_size = Vector2(280, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Nível 4"
+
+[node name="BotaoSair" type="Button" parent="Centro/Conteudo"]
+custom_minimum_size = Vector2(280, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Sair"
+
+[node name="Instrucoes" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -70.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.65, 0.7, 0.8, 1)
+theme_override_font_sizes/font_size = 18
+text = "WASD ou setas para mover  •  Espaço para pular  •  Mouse gira a câmera  •  Esc pausa a partida"
+horizontal_alignment = 1

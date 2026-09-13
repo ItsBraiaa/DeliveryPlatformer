@@ -1,0 +1,260 @@
+[gd_scene load_steps=26 format=3]
+
+[ext_resource type="Script" path="res://scripts/gerenciador_jogo.gd" id="1_gerenciador"]
+[ext_resource type="Script" path="res://scripts/zona_queda.gd" id="2_queda"]
+[ext_resource type="Script" path="res://scripts/plataforma_movel.gd" id="3_movel"]
+[ext_resource type="PackedScene" path="res://scenes/jogador.tscn" id="4_jogador"]
+[ext_resource type="PackedScene" path="res://scenes/pacote.tscn" id="5_pacote"]
+[ext_resource type="PackedScene" path="res://scenes/zona_entrega.tscn" id="6_zona"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="7_hud"]
+
+[sub_resource type="ProceduralSkyMaterial" id="mat_ceu"]
+sky_top_color = Color(0.3, 0.5, 0.85, 1)
+sky_horizon_color = Color(0.76, 0.82, 0.92, 1)
+ground_bottom_color = Color(0.2, 0.24, 0.3, 1)
+ground_horizon_color = Color(0.76, 0.82, 0.92, 1)
+
+[sub_resource type="Sky" id="ceu"]
+sky_material = SubResource("mat_ceu")
+
+[sub_resource type="Environment" id="ambiente"]
+background_mode = 2
+sky = SubResource("ceu")
+ambient_light_source = 3
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="mat_grama"]
+albedo_color = Color(0.35, 0.62, 0.35, 1)
+
+[sub_resource type="StandardMaterial3D" id="mat_grama_claro"]
+albedo_color = Color(0.5, 0.72, 0.42, 1)
+
+[sub_resource type="StandardMaterial3D" id="mat_pedra"]
+albedo_color = Color(0.55, 0.55, 0.62, 1)
+
+[sub_resource type="StandardMaterial3D" id="mat_movel"]
+albedo_color = Color(0.9, 0.55, 0.2, 1)
+
+[sub_resource type="BoxMesh" id="malha_caixa_12"]
+size = Vector3(12, 1, 12)
+
+[sub_resource type="BoxShape3D" id="forma_caixa_12"]
+size = Vector3(12, 1, 12)
+
+[sub_resource type="BoxMesh" id="malha_caixa_4"]
+size = Vector3(4, 1, 4)
+
+[sub_resource type="BoxShape3D" id="forma_caixa_4"]
+size = Vector3(4, 1, 4)
+
+[sub_resource type="BoxMesh" id="malha_caixa_7"]
+size = Vector3(7, 1, 7)
+
+[sub_resource type="BoxShape3D" id="forma_caixa_7"]
+size = Vector3(7, 1, 7)
+
+[sub_resource type="BoxMesh" id="malha_caixa_25"]
+size = Vector3(2.5, 1, 2.5)
+
+[sub_resource type="BoxShape3D" id="forma_caixa_25"]
+size = Vector3(2.5, 1, 2.5)
+
+[sub_resource type="BoxMesh" id="malha_movel"]
+size = Vector3(3, 0.5, 3)
+
+[sub_resource type="BoxShape3D" id="forma_movel"]
+size = Vector3(3, 0.5, 3)
+
+[sub_resource type="BoxShape3D" id="forma_queda"]
+size = Vector3(200, 4, 200)
+
+[node name="Jogo" type="Node3D"]
+script = ExtResource("1_gerenciador")
+proximo_nivel = "res://scenes/nivel_2.tscn"
+
+[node name="Ambiente" type="WorldEnvironment" parent="."]
+environment = SubResource("ambiente")
+
+[node name="Sol" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, 0.383022, -0.321394, 0, 0.642788, 0.766044, 0.5, -0.663414, 0.55667, 0, 20, 0)
+light_color = Color(1, 0.95, 0.85, 1)
+light_energy = 1.2
+shadow_enabled = true
+
+[node name="Cenario" type="Node3D" parent="."]
+
+[node name="PlataformaBase" type="StaticBody3D" parent="Cenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/PlataformaBase"]
+shape = SubResource("forma_caixa_12")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/PlataformaBase"]
+mesh = SubResource("malha_caixa_12")
+surface_material_override/0 = SubResource("mat_grama")
+
+[node name="Norte1" type="StaticBody3D" parent="Cenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -9.5)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Norte1"]
+shape = SubResource("forma_caixa_4")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Norte1"]
+mesh = SubResource("malha_caixa_4")
+surface_material_override/0 = SubResource("mat_grama")
+
+[node name="Norte2" type="StaticBody3D" parent="Cenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, -15)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Norte2"]
+shape = SubResource("forma_caixa_4")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Norte2"]
+mesh = SubResource("malha_caixa_4")
+surface_material_override/0 = SubResource("mat_grama")
+
+[node name="PlataformaCasaA" type="StaticBody3D" parent="Cenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, -21.5)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/PlataformaCasaA"]
+shape = SubResource("forma_caixa_7")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/PlataformaCasaA"]
+mesh = SubResource("malha_caixa_7")
+surface_material_override/0 = SubResource("mat_grama_claro")
+
+[node name="Leste1" type="StaticBody3D" parent="Cenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.5, 0.5, 2)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Leste1"]
+shape = SubResource("forma_caixa_4")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Leste1"]
+mesh = SubResource("malha_caixa_4")
+surface_material_override/0 = SubResource("mat_grama")
+
+[node name="PlataformaMovel" type="AnimatableBody3D" parent="Cenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 1.4, 2)
+script = ExtResource("3_movel")
+deslocamento = Vector3(3.5, 0, 0)
+periodo = 4.0
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/PlataformaMovel"]
+shape = SubResource("forma_movel")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/PlataformaMovel"]
+mesh = SubResource("malha_movel")
+surface_material_override/0 = SubResource("mat_movel")
+
+[node name="PlataformaCasaB" type="StaticBody3D" parent="Cenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 1.3, 2)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/PlataformaCasaB"]
+shape = SubResource("forma_caixa_7")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/PlataformaCasaB"]
+mesh = SubResource("malha_caixa_7")
+surface_material_override/0 = SubResource("mat_grama_claro")
+
+[node name="Oeste1" type="StaticBody3D" parent="Cenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 0.5, 2)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Oeste1"]
+shape = SubResource("forma_caixa_4")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Oeste1"]
+mesh = SubResource("malha_caixa_4")
+surface_material_override/0 = SubResource("mat_grama")
+
+[node name="Oeste2" type="StaticBody3D" parent="Cenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 1.3, 2)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/Oeste2"]
+shape = SubResource("forma_caixa_4")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/Oeste2"]
+mesh = SubResource("malha_caixa_4")
+surface_material_override/0 = SubResource("mat_grama")
+
+[node name="PlataformaCasaC" type="StaticBody3D" parent="Cenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.5, 1.3, 2)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/PlataformaCasaC"]
+shape = SubResource("forma_caixa_7")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/PlataformaCasaC"]
+mesh = SubResource("malha_caixa_7")
+surface_material_override/0 = SubResource("mat_grama_claro")
+
+[node name="DesvioNorte" type="StaticBody3D" parent="Cenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.9, -13)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/DesvioNorte"]
+shape = SubResource("forma_caixa_25")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/DesvioNorte"]
+mesh = SubResource("malha_caixa_25")
+surface_material_override/0 = SubResource("mat_pedra")
+
+[node name="DesvioLeste" type="StaticBody3D" parent="Cenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.5, 0.7, 8)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/DesvioLeste"]
+shape = SubResource("forma_caixa_25")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/DesvioLeste"]
+mesh = SubResource("malha_caixa_25")
+surface_material_override/0 = SubResource("mat_pedra")
+
+[node name="DesvioOeste" type="StaticBody3D" parent="Cenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 0.7, -4)
+
+[node name="Forma" type="CollisionShape3D" parent="Cenario/DesvioOeste"]
+shape = SubResource("forma_caixa_25")
+
+[node name="Malha" type="MeshInstance3D" parent="Cenario/DesvioOeste"]
+mesh = SubResource("malha_caixa_25")
+surface_material_override/0 = SubResource("mat_pedra")
+
+[node name="Pacotes" type="Node3D" parent="."]
+
+[node name="Pacote1" parent="Pacotes" instance=ExtResource("5_pacote")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 2, -13)
+
+[node name="Pacote2" parent="Pacotes" instance=ExtResource("5_pacote")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.5, 1.8, 8)
+
+[node name="Pacote3" parent="Pacotes" instance=ExtResource("5_pacote")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 1.8, -4)
+
+[node name="ZonasEntrega" type="Node3D" parent="."]
+
+[node name="ZonaEntregaA" parent="ZonasEntrega" instance=ExtResource("6_zona")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -20)
+
+[node name="ZonaEntregaB" parent="ZonasEntrega" instance=ExtResource("6_zona")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 20, 1.8, 2)
+
+[node name="ZonaEntregaC" parent="ZonasEntrega" instance=ExtResource("6_zona")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -20, 1.8, 2)
+
+[node name="ZonaQueda" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12, 0)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("2_queda")
+
+[node name="Forma" type="CollisionShape3D" parent="ZonaQueda"]
+shape = SubResource("forma_queda")
+
+[node name="Jogador" parent="." instance=ExtResource("4_jogador")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 4)
+
+[node name="Cronometro" type="Timer" parent="."]
+one_shot = true
+
+[node name="InterfaceJogo" type="CanvasLayer" parent="."]
+process_mode = 3
+
+[node name="HUD" parent="InterfaceJogo" instance=ExtResource("7_hud")]
